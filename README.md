@@ -97,16 +97,6 @@ For more information about MIDL, see:
 - [Anatomy of an IDL File](https://learn.microsoft.com/en-us/windows/win32/com/anatomy-of-an-idl-file)
 - [MIDL Command-Line Reference](https://learn.microsoft.com/en-us/windows/win32/Midl/midl-command-line-reference)
 
-## Release Notes
-
-### 0.1.0
-
-Initial release with comprehensive MIDL syntax highlighting support.
-
-## License
-
-MIT
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
