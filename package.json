@@ -3,19 +3,19 @@
   "displayName": "MIDL Language Support",
   "description": "Syntax highlighting and language support for Microsoft Interface Definition Language (MIDL/IDL) used for COM, DCOM, and RPC interface definitions",
   "version": "0.1.0",
-  "publisher": "your-publisher-name",
+  "publisher": "MIDL Language Support",
   "author": {
-    "name": "Your Name"
+    "name": "MIDL Language Support"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/midl-language-support"
+    "url": "https://github.com/dorianco-microsoft/midl-language-support"
   },
   "bugs": {
-    "url": "https://github.com/your-username/midl-language-support/issues"
+    "url": "https://github.com/dorianco-microsoft/midl-language-support/issues"
   },
-  "homepage": "https://github.com/your-username/midl-language-support#readme",
+  "homepage": "https://github.com/dorianco-microsoft/midl-language-support#readme",
   "engines": {
     "vscode": "^1.75.0"
   },
