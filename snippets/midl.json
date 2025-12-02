@@ -1,0 +1,469 @@
+{
+    "Interface (COM)": {
+        "prefix": ["interface", "iface"],
+        "body": [
+            "[",
+            "\tobject,",
+            "\tuuid(${1:00000000-0000-0000-0000-000000000000}),",
+            "\tpointer_default(unique)",
+            "]",
+            "interface ${2:IMyInterface} : ${3:IUnknown}",
+            "{",
+            "\t$0",
+            "};"
+        ],
+        "description": "COM interface declaration. See: https://learn.microsoft.com/en-us/windows/win32/Midl/interface"
+    },
+    "Interface (Dual)": {
+        "prefix": ["dualinterface", "idual"],
+        "body": [
+            "[",
+            "\tobject,",
+            "\tuuid(${1:00000000-0000-0000-0000-000000000000}),",
+            "\tdual,",
+            "\toleautomation,",
+            "\thelpstring(\"${2:Interface description}\"),",
+            "\tpointer_default(unique)",
+            "]",
+            "interface ${3:IMyInterface} : IDispatch",
+            "{",
+            "\t$0",
+            "};"
+        ],
+        "description": "Dual interface for Automation. See: https://learn.microsoft.com/en-us/windows/win32/Midl/dual"
+    },
+    "Interface (RPC)": {
+        "prefix": ["rpcinterface", "irpc"],
+        "body": [
+            "[",
+            "\tuuid(${1:00000000-0000-0000-0000-000000000000}),",
+            "\tversion(${2:1.0})",
+            "]",
+            "interface ${3:IRemoteInterface}",
+            "{",
+            "\t$0",
+            "}"
+        ],
+        "description": "RPC interface declaration. See: https://learn.microsoft.com/en-us/windows/win32/Midl/interface"
+    },
+    "Coclass": {
+        "prefix": ["coclass", "class"],
+        "body": [
+            "[",
+            "\tuuid(${1:00000000-0000-0000-0000-000000000000}),",
+            "\thelpstring(\"${2:Class description}\")",
+            "]",
+            "coclass ${3:MyClass}",
+            "{",
+            "\t[default] interface ${4:IMyInterface};",
+            "\t$0",
+            "};"
+        ],
+        "description": "Component class declaration. See: https://learn.microsoft.com/en-us/windows/win32/Midl/coclass"
+    },
+    "Coclass with Events": {
+        "prefix": ["coclassevents", "classevents"],
+        "body": [
+            "[",
+            "\tuuid(${1:00000000-0000-0000-0000-000000000000}),",
+            "\thelpstring(\"${2:Class description}\")",
+            "]",
+            "coclass ${3:MyClass}",
+            "{",
+            "\t[default] interface ${4:IMyInterface};",
+            "\t[default, source] dispinterface ${5:DMyEvents};",
+            "};"
+        ],
+        "description": "Component class with event source. See: https://learn.microsoft.com/en-us/windows/win32/Midl/coclass"
+    },
+    "Library": {
+        "prefix": ["library", "typelib"],
+        "body": [
+            "[",
+            "\tuuid(${1:00000000-0000-0000-0000-000000000000}),",
+            "\thelpstring(\"${2:Type Library} ${3:1.0}\"),",
+            "\tversion(${3:1.0})",
+            "]",
+            "library ${4:MyLib}",
+            "{",
+            "\timportlib(\"stdole32.tlb\");",
+            "\timportlib(\"stdole2.tlb\");",
+            "",
+            "\t$0",
+            "};"
+        ],
+        "description": "Type library declaration. See: https://learn.microsoft.com/en-us/windows/win32/Midl/library"
+    },
+    "Dispinterface": {
+        "prefix": ["dispinterface", "disp"],
+        "body": [
+            "[",
+            "\tuuid(${1:00000000-0000-0000-0000-000000000000}),",
+            "\thelpstring(\"${2:Dispatch Interface}\")",
+            "]",
+            "dispinterface ${3:DMyDispInterface}",
+            "{",
+            "\tproperties:",
+            "\t\t$0",
+            "\tmethods:",
+            "};"
+        ],
+        "description": "Dispatch interface declaration. See: https://learn.microsoft.com/en-us/windows/win32/Midl/dispinterface"
+    },
+    "Dispinterface from Interface": {
+        "prefix": ["dispinterfacefrom", "dispfrom"],
+        "body": [
+            "[",
+            "\tuuid(${1:00000000-0000-0000-0000-000000000000})",
+            "]",
+            "dispinterface ${2:DMyObject}",
+            "{",
+            "\tinterface ${3:IMyObject};",
+            "};"
+        ],
+        "description": "Dispatch interface from existing interface. See: https://learn.microsoft.com/en-us/windows/win32/Midl/dispinterface"
+    },
+    "Module": {
+        "prefix": ["module", "mod"],
+        "body": [
+            "[",
+            "\tuuid(${1:00000000-0000-0000-0000-000000000000}),",
+            "\thelpstring(\"${2:Module description}\"),",
+            "\tdllname(\"${3:MyModule.dll}\")",
+            "]",
+            "module ${4:MyModule}",
+            "{",
+            "\t$0",
+            "};"
+        ],
+        "description": "Module declaration for DLL exports. See: https://learn.microsoft.com/en-us/windows/win32/Midl/module"
+    },
+    "Struct": {
+        "prefix": ["struct", "structure"],
+        "body": [
+            "typedef struct ${1:tag}${2:MY_STRUCT}",
+            "{",
+            "\t${3:long} ${4:member1};",
+            "\t$0",
+            "} ${2:MY_STRUCT};"
+        ],
+        "description": "Structure declaration. See: https://learn.microsoft.com/en-us/windows/win32/Midl/struct"
+    },
+    "Struct with Size": {
+        "prefix": ["structsize", "sizedstruct"],
+        "body": [
+            "typedef struct ${1:tag}${2:MY_STRUCT}",
+            "{",
+            "\tlong cbSize;",
+            "\tlong ${3:count};",
+            "\t[size_is(${3:count})] ${4:byte}* ${5:pData};",
+            "\t$0",
+            "} ${2:MY_STRUCT};"
+        ],
+        "description": "Structure with sized array member. See: https://learn.microsoft.com/en-us/windows/win32/Midl/size-is"
+    },
+    "Union (Encapsulated)": {
+        "prefix": ["union", "encunion"],
+        "body": [
+            "typedef union ${1:tag}${2:MY_UNION} switch (${3:short} ${4:type}) ${5:u}",
+            "{",
+            "\tcase ${6:1}:",
+            "\t\t${7:long} ${8:lValue};",
+            "\tcase ${9:2}:",
+            "\t\t${10:double} ${11:dValue};",
+            "\tdefault:",
+            "\t\t;",
+            "} ${2:MY_UNION};"
+        ],
+        "description": "Encapsulated union declaration. See: https://learn.microsoft.com/en-us/windows/win32/Midl/union"
+    },
+    "Union (Non-encapsulated)": {
+        "prefix": ["switchunion", "neunion"],
+        "body": [
+            "typedef [switch_type(${1:short})] union ${2:tag}${3:DATA}",
+            "{",
+            "\t[case(${4:0})]",
+            "\t\t${5:long} ${6:intData};",
+            "\t[case(${7:1})]",
+            "\t\t${8:float} ${9:floatData};",
+            "\t[default]",
+            "\t\t;",
+            "} ${3:DATA};"
+        ],
+        "description": "Non-encapsulated union with switch_type. See: https://learn.microsoft.com/en-us/windows/win32/Midl/switch-type"
+    },
+    "Enum": {
+        "prefix": ["enum", "enumeration"],
+        "body": [
+            "typedef enum ${1:tag}${2:MY_ENUM}",
+            "{",
+            "\t${3:VALUE_FIRST} = ${4:0},",
+            "\t${5:VALUE_SECOND},",
+            "\t$0",
+            "} ${2:MY_ENUM};"
+        ],
+        "description": "Enumeration declaration. See: https://learn.microsoft.com/en-us/windows/win32/Midl/enum"
+    },
+    "Enum (v1_enum)": {
+        "prefix": ["v1enum", "largeenum"],
+        "body": [
+            "typedef [v1_enum] enum ${1:tag}${2:MY_ENUM}",
+            "{",
+            "\t${3:VALUE_FIRST} = ${4:0},",
+            "\t${5:VALUE_SECOND},",
+            "\t$0",
+            "} ${2:MY_ENUM};"
+        ],
+        "description": "Enumeration with 32-bit transmission. See: https://learn.microsoft.com/en-us/windows/win32/Midl/v1-enum"
+    },
+    "Typedef": {
+        "prefix": ["typedef", "type"],
+        "body": [
+            "typedef ${1:type} ${2:NEW_TYPE};"
+        ],
+        "description": "Type definition. See: https://learn.microsoft.com/en-us/windows/win32/Midl/typedef"
+    },
+    "Typedef String": {
+        "prefix": ["typedefstring", "stringtype"],
+        "body": [
+            "typedef [string] ${1:wchar_t}* ${2:LPWSTR};"
+        ],
+        "description": "String type definition. See: https://learn.microsoft.com/en-us/windows/win32/Midl/string"
+    },
+    "Typedef Context Handle": {
+        "prefix": ["contexthandle", "ctxhandle"],
+        "body": [
+            "typedef [context_handle] void* ${1:MY_CONTEXT_HANDLE};"
+        ],
+        "description": "Context handle type definition. See: https://learn.microsoft.com/en-us/windows/win32/Midl/context-handle"
+    },
+    "Method": {
+        "prefix": ["method", "func"],
+        "body": [
+            "HRESULT ${1:MethodName}(",
+            "\t[in] ${2:long} ${3:param1}${4:,}",
+            "\t${5:[out, retval] ${6:long}* ${7:pResult}}",
+            ");"
+        ],
+        "description": "Method declaration. See: https://learn.microsoft.com/en-us/windows/win32/Midl/in"
+    },
+    "Method with ID": {
+        "prefix": ["methodid", "idfunc"],
+        "body": [
+            "[id(${1:1}), helpstring(\"${2:Method description}\")]",
+            "HRESULT ${3:MethodName}(",
+            "\t[in] ${4:BSTR} ${5:input},",
+            "\t[out, retval] ${6:BSTR}* ${7:pOutput}",
+            ");"
+        ],
+        "description": "Method with DISPID. See: https://learn.microsoft.com/en-us/windows/win32/Midl/id"
+    },
+    "Method with Array": {
+        "prefix": ["methodarray", "arrayfunc"],
+        "body": [
+            "HRESULT ${1:ProcessData}(",
+            "\t[in] ${2:long} ${3:count},",
+            "\t[in, size_is(${3:count})] ${4:byte}* ${5:data},",
+            "\t[out, retval] ${6:long}* ${7:pResult}",
+            ");"
+        ],
+        "description": "Method with sized array parameter. See: https://learn.microsoft.com/en-us/windows/win32/Midl/size-is"
+    },
+    "Property Get": {
+        "prefix": ["propget", "getprop"],
+        "body": [
+            "[propget, id(${1:1}), helpstring(\"${2:Gets the property}\")]",
+            "HRESULT ${3:PropertyName}([out, retval] ${4:long}* pVal);"
+        ],
+        "description": "Property getter. See: https://learn.microsoft.com/en-us/windows/win32/Midl/propget"
+    },
+    "Property Put": {
+        "prefix": ["propput", "setprop"],
+        "body": [
+            "[propput, id(${1:1}), helpstring(\"${2:Sets the property}\")]",
+            "HRESULT ${3:PropertyName}([in] ${4:long} newVal);"
+        ],
+        "description": "Property setter. See: https://learn.microsoft.com/en-us/windows/win32/Midl/propput"
+    },
+    "Property Get/Put Pair": {
+        "prefix": ["property", "prop"],
+        "body": [
+            "[propget, id(${1:1}), helpstring(\"${2:Gets the ${3:property}}\")]",
+            "HRESULT ${3:PropertyName}([out, retval] ${4:long}* pVal);",
+            "",
+            "[propput, id(${1:1}), helpstring(\"Sets the ${3:property}\")]",
+            "HRESULT ${3:PropertyName}([in] ${4:long} newVal);"
+        ],
+        "description": "Property getter and setter pair. See: https://learn.microsoft.com/en-us/windows/win32/Midl/propget"
+    },
+    "Property PutRef": {
+        "prefix": ["propputref", "refprop"],
+        "body": [
+            "[propputref, id(${1:1}), helpstring(\"${2:Sets the object reference}\")]",
+            "HRESULT ${3:PropertyName}([in] ${4:IUnknown}* pVal);"
+        ],
+        "description": "Property reference setter. See: https://learn.microsoft.com/en-us/windows/win32/Midl/propputref"
+    },
+    "Import": {
+        "prefix": ["import"],
+        "body": [
+            "import \"${1:oaidl.idl}\";"
+        ],
+        "description": "Import IDL file. See: https://learn.microsoft.com/en-us/windows/win32/Midl/import"
+    },
+    "Import Standard": {
+        "prefix": ["importstd", "stdimport"],
+        "body": [
+            "import \"oaidl.idl\";",
+            "import \"ocidl.idl\";"
+        ],
+        "description": "Import standard OLE Automation IDL files"
+    },
+    "Importlib": {
+        "prefix": ["importlib"],
+        "body": [
+            "importlib(\"${1:stdole32.tlb}\");"
+        ],
+        "description": "Import type library. See: https://learn.microsoft.com/en-us/windows/win32/Midl/importlib"
+    },
+    "cpp_quote": {
+        "prefix": ["cppquote", "cpp"],
+        "body": [
+            "cpp_quote(\"${1:#include <windows.h>}\")"
+        ],
+        "description": "C/C++ code insertion. See: https://learn.microsoft.com/en-us/windows/win32/Midl/cpp-quote"
+    },
+    "UUID Attribute": {
+        "prefix": ["uuid", "guid"],
+        "body": [
+            "uuid(${1:00000000-0000-0000-0000-000000000000})"
+        ],
+        "description": "UUID/GUID attribute. See: https://learn.microsoft.com/en-us/windows/win32/Midl/uuid"
+    },
+    "Helpstring": {
+        "prefix": ["helpstring", "help"],
+        "body": [
+            "helpstring(\"${1:Description}\")"
+        ],
+        "description": "Help string attribute. See: https://learn.microsoft.com/en-us/windows/win32/Midl/helpstring"
+    },
+    "IDL File Template": {
+        "prefix": ["idlfile", "newfile"],
+        "body": [
+            "// ${1:MyComponent}.idl",
+            "// Interface definitions for ${1:MyComponent}",
+            "",
+            "import \"oaidl.idl\";",
+            "import \"ocidl.idl\";",
+            "",
+            "[",
+            "\tuuid(${2:00000000-0000-0000-0000-000000000000}),",
+            "\thelpstring(\"${1:MyComponent} ${3:1.0} Type Library\"),",
+            "\tversion(${3:1.0})",
+            "]",
+            "library ${1:MyComponent}Lib",
+            "{",
+            "\timportlib(\"stdole32.tlb\");",
+            "\timportlib(\"stdole2.tlb\");",
+            "",
+            "\t// Interface definition",
+            "\t[",
+            "\t\tobject,",
+            "\t\tuuid(${4:00000000-0000-0000-0000-000000000001}),",
+            "\t\tdual,",
+            "\t\toleautomation,",
+            "\t\thelpstring(\"I${1:MyComponent} Interface\"),",
+            "\t\tpointer_default(unique)",
+            "\t]",
+            "\tinterface I${1:MyComponent} : IDispatch",
+            "\t{",
+            "\t\t$0",
+            "\t};",
+            "",
+            "\t// Coclass definition",
+            "\t[",
+            "\t\tuuid(${5:00000000-0000-0000-0000-000000000002}),",
+            "\t\thelpstring(\"${1:MyComponent} Class\")",
+            "\t]",
+            "\tcoclass ${1:MyComponent}",
+            "\t{",
+            "\t\t[default] interface I${1:MyComponent};",
+            "\t};",
+            "};"
+        ],
+        "description": "Complete IDL file template with library, interface, and coclass"
+    },
+    "RPC IDL File Template": {
+        "prefix": ["rpcfile", "rpcidl"],
+        "body": [
+            "// ${1:MyRpc}.idl",
+            "// RPC Interface definitions",
+            "",
+            "import \"rpcndr.h\";",
+            "import \"rpc.h\";",
+            "",
+            "cpp_quote(\"#include <windows.h>\")",
+            "",
+            "[",
+            "\tuuid(${2:00000000-0000-0000-0000-000000000000}),",
+            "\tversion(${3:1.0}),",
+            "\tpointer_default(unique)",
+            "]",
+            "interface ${1:MyRpc}",
+            "{",
+            "\t// Context handle",
+            "\ttypedef [context_handle] void* ${4:MY_CONTEXT};",
+            "",
+            "\t// Methods",
+            "\terror_status_t ${5:RemoteMethod}(",
+            "\t\t[in] handle_t hBinding,",
+            "\t\t[in] long input,",
+            "\t\t[out] long* pOutput",
+            "\t);",
+            "\t$0",
+            "}"
+        ],
+        "description": "RPC IDL file template with context handle"
+    },
+    "Callback Interface": {
+        "prefix": ["callback", "callbackinterface"],
+        "body": [
+            "[",
+            "\tobject,",
+            "\tuuid(${1:00000000-0000-0000-0000-000000000000}),",
+            "\thelpstring(\"${2:Callback Interface}\")",
+            "]",
+            "interface ${3:ICallback} : IUnknown",
+            "{",
+            "\tHRESULT OnComplete([in] HRESULT hrStatus);",
+            "\tHRESULT OnProgress([in] long percentComplete);",
+            "\tHRESULT OnError([in] HRESULT hrError, [in] BSTR message);",
+            "};"
+        ],
+        "description": "Callback interface pattern"
+    },
+    "Event Dispinterface": {
+        "prefix": ["events", "eventdisp"],
+        "body": [
+            "[",
+            "\tuuid(${1:00000000-0000-0000-0000-000000000000}),",
+            "\thelpstring(\"${2:Events}\")",
+            "]",
+            "dispinterface ${3:DEvents}",
+            "{",
+            "\tproperties:",
+            "\tmethods:",
+            "\t\t[id(1)] void ${4:OnEvent}([in] ${5:long} ${6:param});",
+            "\t\t$0",
+            "};"
+        ],
+        "description": "Event dispatch interface. See: https://learn.microsoft.com/en-us/windows/win32/Midl/source"
+    },
+    "Pipe Type": {
+        "prefix": ["pipe", "pipetype"],
+        "body": [
+            "typedef pipe ${1:byte} ${2:BYTE_PIPE};"
+        ],
+        "description": "Pipe type for streaming. See: https://learn.microsoft.com/en-us/windows/win32/Midl/pipe"
+    }
+}

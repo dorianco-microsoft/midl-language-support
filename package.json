@@ -1,0 +1,92 @@
+{
+  "name": "midl-language-support",
+  "displayName": "MIDL Language Support",
+  "description": "Syntax highlighting and language support for Microsoft Interface Definition Language (MIDL/IDL) used for COM, DCOM, and RPC interface definitions",
+  "version": "0.1.0",
+  "publisher": "your-publisher-name",
+  "author": {
+    "name": "Your Name"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/midl-language-support"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/midl-language-support/issues"
+  },
+  "homepage": "https://github.com/your-username/midl-language-support#readme",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "midl",
+    "idl",
+    "interface definition language",
+    "microsoft",
+    "com",
+    "dcom",
+    "rpc",
+    "windows"
+  ],
+  "galleryBanner": {
+    "color": "#0078D4",
+    "theme": "dark"
+  },
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:midl"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "midl",
+        "aliases": [
+          "Microsoft Interface Definition Language",
+          "MIDL",
+          "IDL"
+        ],
+        "extensions": [
+          ".midl",
+          ".idl",
+          ".acf"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/midl-light.svg",
+          "dark": "./icons/midl-dark.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "midl",
+        "scopeName": "source.midl",
+        "path": "./syntaxes/midl.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "midl",
+        "path": "./snippets/midl.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^18.x",
+    "@types/vscode": "^1.75.0",
+    "@typescript-eslint/eslint-plugin": "^6.x",
+    "@typescript-eslint/parser": "^6.x",
+    "eslint": "^8.x",
+    "typescript": "^5.x"
+  }
+}

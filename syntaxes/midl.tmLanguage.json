@@ -1,0 +1,492 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Microsoft Interface Definition Language",
+	"scopeName": "source.midl",
+	"patterns": [
+		{ "include": "#comments" },
+		{ "include": "#preprocessor" },
+		{ "include": "#cpp-quote" },
+		{ "include": "#import-statement" },
+		{ "include": "#library-block" },
+		{ "include": "#interface-block" },
+		{ "include": "#coclass-block" },
+		{ "include": "#dispinterface-block" },
+		{ "include": "#module-block" },
+		{ "include": "#attribute-block" },
+		{ "include": "#typedef" },
+		{ "include": "#struct-union" },
+		{ "include": "#enum" },
+		{ "include": "#constants" },
+		{ "include": "#types" },
+		{ "include": "#keywords" },
+		{ "include": "#strings" },
+		{ "include": "#numbers" },
+		{ "include": "#operators" }
+	],
+	"repository": {
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.double-slash.midl",
+					"match": "//.*$"
+				},
+				{
+					"name": "comment.block.midl",
+					"begin": "/\\*",
+					"end": "\\*/",
+					"captures": {
+						"0": { "name": "punctuation.definition.comment.midl" }
+					}
+				}
+			]
+		},
+		"preprocessor": {
+			"patterns": [
+				{
+					"name": "meta.preprocessor.include.midl",
+					"match": "^\\s*(#)\\s*(include)\\s+(<[^>]+>|\"[^\"]+\")",
+					"captures": {
+						"1": { "name": "punctuation.definition.directive.midl" },
+						"2": { "name": "keyword.control.directive.include.midl" },
+						"3": { "name": "string.quoted.other.include.midl" }
+					}
+				},
+				{
+					"name": "meta.preprocessor.define.midl",
+					"match": "^\\s*(#)\\s*(define)\\s+(\\w+)",
+					"captures": {
+						"1": { "name": "punctuation.definition.directive.midl" },
+						"2": { "name": "keyword.control.directive.define.midl" },
+						"3": { "name": "entity.name.constant.preprocessor.midl" }
+					}
+				},
+				{
+					"name": "meta.preprocessor.pragma.midl",
+					"match": "^\\s*(#)\\s*(pragma)\\s+(\\w+)",
+					"captures": {
+						"1": { "name": "punctuation.definition.directive.midl" },
+						"2": { "name": "keyword.control.directive.pragma.midl" },
+						"3": { "name": "keyword.other.pragma.midl" }
+					}
+				},
+				{
+					"name": "meta.preprocessor.conditional.midl",
+					"match": "^\\s*(#)\\s*(ifdef|ifndef|if|elif|else|endif|undef)\\b",
+					"captures": {
+						"1": { "name": "punctuation.definition.directive.midl" },
+						"2": { "name": "keyword.control.directive.conditional.midl" }
+					}
+				}
+			]
+		},
+		"cpp-quote": {
+			"name": "meta.cpp-quote.midl",
+			"begin": "\\b(cpp_quote)\\s*\\(",
+			"beginCaptures": {
+				"1": { "name": "keyword.other.cpp-quote.midl" }
+			},
+			"end": "\\)",
+			"patterns": [
+				{ "include": "#strings" }
+			]
+		},
+		"import-statement": {
+			"patterns": [
+				{
+					"name": "meta.import.midl",
+					"match": "\\b(import|importlib)\\b\\s*([^;]+)",
+					"captures": {
+						"1": { "name": "keyword.control.import.midl" },
+						"2": {
+							"patterns": [
+								{ "include": "#strings" }
+							]
+						}
+					}
+				}
+			]
+		},
+		"attribute-block": {
+			"name": "meta.attribute-block.midl",
+			"begin": "\\[",
+			"beginCaptures": {
+				"0": { "name": "punctuation.definition.attribute.begin.midl" }
+			},
+			"end": "\\]",
+			"endCaptures": {
+				"0": { "name": "punctuation.definition.attribute.end.midl" }
+			},
+			"patterns": [
+				{ "include": "#comments" },
+				{ "include": "#uuid-attribute" },
+				{ "include": "#attributes" },
+				{ "include": "#strings" },
+				{ "include": "#numbers" }
+			]
+		},
+		"uuid-attribute": {
+			"patterns": [
+				{
+					"name": "meta.attribute.uuid.midl",
+					"match": "\\b(uuid)\\s*\\(\\s*([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})\\s*\\)",
+					"captures": {
+						"1": { "name": "entity.other.attribute-name.uuid.midl" },
+						"2": { "name": "constant.numeric.uuid.midl" }
+					}
+				},
+				{
+					"name": "meta.attribute.uuid.quoted.midl",
+					"match": "\\b(uuid)\\s*\\(\\s*\"([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})\"\\s*\\)",
+					"captures": {
+						"1": { "name": "entity.other.attribute-name.uuid.midl" },
+						"2": { "name": "constant.numeric.uuid.midl" }
+					}
+				}
+			]
+		},
+		"attributes": {
+			"patterns": [
+				{
+					"name": "entity.other.attribute-name.directional.midl",
+					"match": "\\b(in|out|retval)\\b"
+				},
+				{
+					"name": "entity.other.attribute-name.pointer.midl",
+					"match": "\\b(ptr|ref|unique|pointer_default|iid_is|string)\\b"
+				},
+				{
+					"name": "entity.other.attribute-name.array.midl",
+					"match": "\\b(size_is|max_is|length_is|first_is|last_is|min_is|range)\\b"
+				},
+				{
+					"name": "entity.other.attribute-name.interface.midl",
+					"match": "\\b(object|local|async_uuid|version|endpoint|ms_union)\\b"
+				},
+				{
+					"name": "entity.other.attribute-name.typelib.midl",
+					"match": "\\b(aggregatable|appobject|bindable|control|custom|default|defaultbind|defaultcollelem|defaultvalue|defaultvtable|dispinterface|displaybind|dllname|dual|entry|helpcontext|helpfile|helpstring|helpstringcontext|helpstringdll|hidden|id|immediatebind|lcid|library|licensed|nonbrowsable|noncreatable|nonextensible|oleautomation|optional|propget|propput|propputref|public|readonly|requestedit|restricted|source|uidefault|usesgetlasterror|vararg)\\b"
+				},
+				{
+					"name": "entity.other.attribute-name.call.midl",
+					"match": "\\b(message|maybe|broadcast|idempotent|callback|call_as|async)\\b"
+				},
+				{
+					"name": "entity.other.attribute-name.marshal.midl",
+					"match": "\\b(context_handle|handle|transmit_as|wire_marshal|user_marshal|represent_as|v1_enum|v1_array|v1_string|v1_struct)\\b"
+				},
+				{
+					"name": "entity.other.attribute-name.struct.midl",
+					"match": "\\b(switch|switch_is|switch_type|ignore|partial_ignore)\\b"
+				},
+				{
+					"name": "entity.other.attribute-name.acf.midl",
+					"match": "\\b(auto_handle|context_handle_noserialize|context_handle_serialize|explicit_handle|implicit_handle|strict_context_handle|type_strict_context_handle|allocate|enable_allocate|encode|decode|fault_status|comm_status|nocode|code|notify|notify_flag|optimize|represent_as)\\b"
+				},
+				{
+					"name": "entity.other.attribute-name.system.midl",
+					"match": "\\b(system_handle|sh_composition|sh_event|sh_file|sh_job|sh_mutex|sh_pipe|sh_process|sh_reg_key|sh_section|sh_semaphore|sh_socket|sh_thread|sh_token)\\b"
+				},
+				{
+					"name": "entity.other.attribute-name.other.midl",
+					"match": "\\b(annotation|byte_count|cs_char|cs_drtag|cs_rtag|cs_stag|cs_tag_rtn|disable_consistency_check|force_allocate|heap|input_sync|interpret|long_enum|manual|ms_conf_struct|nointerpret|off_line|out_of_line|in_line|predeclid|proxy|shape|short_enum|unaligned|winrt_remote_async|zeroout_alignmentgap)\\b"
+				}
+			]
+		},
+		"library-block": {
+			"name": "meta.library.midl",
+			"begin": "\\b(library)\\s+(\\w+)\\s*\\{",
+			"beginCaptures": {
+				"1": { "name": "keyword.declaration.library.midl" },
+				"2": { "name": "entity.name.type.library.midl" }
+			},
+			"end": "\\}",
+			"patterns": [
+				{ "include": "$self" }
+			]
+		},
+		"interface-block": {
+			"name": "meta.interface.midl",
+			"begin": "\\b(interface)\\s+(\\w+)(?:\\s*:\\s*(\\w+))?\\s*\\{",
+			"beginCaptures": {
+				"1": { "name": "keyword.declaration.interface.midl" },
+				"2": { "name": "entity.name.type.interface.midl" },
+				"3": { "name": "entity.other.inherited-class.midl" }
+			},
+			"end": "\\}",
+			"patterns": [
+				{ "include": "$self" }
+			]
+		},
+		"coclass-block": {
+			"name": "meta.coclass.midl",
+			"begin": "\\b(coclass)\\s+(\\w+)\\s*\\{",
+			"beginCaptures": {
+				"1": { "name": "keyword.declaration.coclass.midl" },
+				"2": { "name": "entity.name.type.coclass.midl" }
+			},
+			"end": "\\}",
+			"patterns": [
+				{ "include": "$self" }
+			]
+		},
+		"dispinterface-block": {
+			"name": "meta.dispinterface.midl",
+			"begin": "\\b(dispinterface)\\s+(\\w+)\\s*\\{",
+			"beginCaptures": {
+				"1": { "name": "keyword.declaration.dispinterface.midl" },
+				"2": { "name": "entity.name.type.dispinterface.midl" }
+			},
+			"end": "\\}",
+			"patterns": [
+				{ "include": "#methods-properties" },
+				{ "include": "$self" }
+			]
+		},
+		"module-block": {
+			"name": "meta.module.midl",
+			"begin": "\\b(module)\\s+(\\w+)\\s*\\{",
+			"beginCaptures": {
+				"1": { "name": "keyword.declaration.module.midl" },
+				"2": { "name": "entity.name.type.module.midl" }
+			},
+			"end": "\\}",
+			"patterns": [
+				{ "include": "$self" }
+			]
+		},
+		"methods-properties": {
+			"patterns": [
+				{
+					"name": "keyword.other.methods.midl",
+					"match": "\\b(methods|properties)\\s*:"
+				}
+			]
+		},
+		"typedef": {
+			"patterns": [
+				{
+					"name": "meta.typedef.midl",
+					"match": "\\b(typedef)\\b",
+					"captures": {
+						"1": { "name": "keyword.declaration.typedef.midl" }
+					}
+				}
+			]
+		},
+		"struct-union": {
+			"patterns": [
+				{
+					"name": "meta.struct.midl",
+					"begin": "\\b(struct)\\s+(\\w+)?\\s*\\{",
+					"beginCaptures": {
+						"1": { "name": "keyword.declaration.struct.midl" },
+						"2": { "name": "entity.name.type.struct.midl" }
+					},
+					"end": "\\}",
+					"patterns": [
+						{ "include": "$self" }
+					]
+				},
+				{
+					"name": "meta.union.midl",
+					"begin": "\\b(union)\\s+(\\w+)?\\s*\\{",
+					"beginCaptures": {
+						"1": { "name": "keyword.declaration.union.midl" },
+						"2": { "name": "entity.name.type.union.midl" }
+					},
+					"end": "\\}",
+					"patterns": [
+						{ "include": "$self" }
+					]
+				},
+				{
+					"match": "\\b(struct|union)\\b",
+					"name": "keyword.declaration.midl"
+				}
+			]
+		},
+		"enum": {
+			"patterns": [
+				{
+					"name": "meta.enum.midl",
+					"begin": "\\b(enum)\\s+(\\w+)?\\s*\\{",
+					"beginCaptures": {
+						"1": { "name": "keyword.declaration.enum.midl" },
+						"2": { "name": "entity.name.type.enum.midl" }
+					},
+					"end": "\\}",
+					"patterns": [
+						{ "include": "#comments" },
+						{ "include": "#numbers" },
+						{
+							"match": "\\b(\\w+)\\b",
+							"name": "variable.other.enummember.midl"
+						}
+					]
+				},
+				{
+					"match": "\\b(enum)\\b",
+					"name": "keyword.declaration.enum.midl"
+				}
+			]
+		},
+		"types": {
+			"patterns": [
+				{
+					"name": "storage.type.primitive.midl",
+					"match": "\\b(boolean|byte|char|double|float|hyper|int|long|short|small|void|wchar_t|handle_t|error_status_t)\\b"
+				},
+				{
+					"name": "storage.type.sized.midl",
+					"match": "\\b(__int8|__int16|__int32|__int3264|__int64|__int128|__float80|__float128)\\b"
+				},
+				{
+					"name": "storage.type.com.midl",
+					"match": "\\b(HRESULT|SCODE|BSTR|VARIANT|SAFEARRAY|VARIANT_BOOL|CURRENCY|DATE|DECIMAL)\\b"
+				},
+				{
+					"name": "storage.type.handle.midl",
+					"match": "\\b(HMETAFILE|HMETAFILEPICT|HENHMETAFILE|HBITMAP|HPALETTE|HGLOBAL|HWND|HDC|HFONT|HICON|HMENU|HACCEL|HBRUSH|HPEN|HRGN)\\b"
+				},
+				{
+					"name": "storage.type.interface.midl",
+					"match": "\\b(IUnknown|IDispatch|ITypeInfo|ITypeLib|IStream|IStorage|IMoniker|IBindCtx|IEnumVARIANT|IClassFactory)\\b"
+				},
+				{
+					"name": "storage.type.pointer.midl",
+					"match": "\\b(LPUNKNOWN|LPDISPATCH|LPSTREAM|LPSTORAGE|LPMONIKER|LPSTR|LPWSTR|LPCSTR|LPCWSTR|LPVOID)\\b"
+				},
+				{
+					"name": "storage.type.windows.midl",
+					"match": "\\b(DWORD|WORD|BYTE|BOOL|LONG|ULONG|UINT|INT|USHORT|UCHAR|LONGLONG|ULONGLONG|SIZE_T|SSIZE_T|GUID|UUID|CLSID|IID|REFIID|REFCLSID|REFGUID)\\b"
+				},
+				{
+					"name": "storage.modifier.midl",
+					"match": "\\b(const|signed|unsigned|volatile|extern|static|register|auto|inline|__inline)\\b"
+				},
+				{
+					"name": "storage.modifier.calling.midl",
+					"match": "\\b(__cdecl|__stdcall|__fastcall|__pascal|cdecl|stdcall|pascal|far|near|__far|__near)\\b"
+				}
+			]
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.declaration.midl",
+					"match": "\\b(interface|coclass|library|dispinterface|module|struct|union|enum|typedef)\\b"
+				},
+				{
+					"name": "keyword.control.midl",
+					"match": "\\b(import|importlib|include)\\b"
+				},
+				{
+					"name": "keyword.other.midl",
+					"match": "\\b(cpp_quote|declare_guid|midl_pragma|pipe|switch|case|default)\\b"
+				},
+				{
+					"name": "keyword.operator.midl",
+					"match": "\\b(sizeof|__alignof)\\b"
+				}
+			]
+		},
+		"constants": {
+			"patterns": [
+				{
+					"name": "constant.language.boolean.midl",
+					"match": "\\b(TRUE|FALSE)\\b"
+				},
+				{
+					"name": "constant.language.null.midl",
+					"match": "\\b(NULL)\\b"
+				}
+			]
+		},
+		"strings": {
+			"patterns": [
+				{
+					"name": "string.quoted.double.midl",
+					"begin": "\"",
+					"end": "\"",
+					"patterns": [
+						{
+							"name": "constant.character.escape.midl",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "string.quoted.single.midl",
+					"begin": "'",
+					"end": "'",
+					"patterns": [
+						{
+							"name": "constant.character.escape.midl",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "string.quoted.other.midl",
+					"match": "L\"[^\"]*\""
+				}
+			]
+		},
+		"numbers": {
+			"patterns": [
+				{
+					"name": "constant.numeric.hex.midl",
+					"match": "\\b0[xX][0-9a-fA-F]+[uUlL]*\\b"
+				},
+				{
+					"name": "constant.numeric.octal.midl",
+					"match": "\\b0[0-7]+[uUlL]*\\b"
+				},
+				{
+					"name": "constant.numeric.decimal.midl",
+					"match": "\\b[0-9]+[uUlL]*\\b"
+				},
+				{
+					"name": "constant.numeric.float.midl",
+					"match": "\\b[0-9]+\\.[0-9]+([eE][+-]?[0-9]+)?[fFlL]?\\b"
+				}
+			]
+		},
+		"operators": {
+			"patterns": [
+				{
+					"name": "keyword.operator.assignment.midl",
+					"match": "="
+				},
+				{
+					"name": "keyword.operator.arithmetic.midl",
+					"match": "[+\\-*/%]"
+				},
+				{
+					"name": "keyword.operator.bitwise.midl",
+					"match": "[&|^~]|<<|>>"
+				},
+				{
+					"name": "keyword.operator.comparison.midl",
+					"match": "==|!=|<=|>=|<|>"
+				},
+				{
+					"name": "keyword.operator.logical.midl",
+					"match": "&&|\\|\\||!"
+				},
+				{
+					"name": "punctuation.terminator.statement.midl",
+					"match": ";"
+				},
+				{
+					"name": "punctuation.separator.comma.midl",
+					"match": ","
+				},
+				{
+					"name": "punctuation.accessor.midl",
+					"match": "\\.|::|->|:"
+				}
+			]
+		}
+	}
+}

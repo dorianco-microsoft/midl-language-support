@@ -1,0 +1,155 @@
+// Sample RPC Interface Definition
+// Demonstrates RPC-specific MIDL features
+
+import "rpcndr.h";
+import "rpc.h";
+
+// cpp_quote directive for C/C++ code insertion
+cpp_quote("#include <windows.h>")
+cpp_quote("#define SAMPLE_VERSION 1")
+
+// Preprocessor directives
+#define MAX_BUFFER_SIZE 4096
+#define MAX_NAME_LEN 256
+
+#ifndef _SAMPLE_RPC_IDL_
+#define _SAMPLE_RPC_IDL_
+
+//
+// RPC interface with explicit handle
+//
+[
+    uuid(AABBCCDD-1234-5678-9ABC-DEF012345678),
+    version(1.0),
+    endpoint("ncalrpc:[sample_endpoint]"),
+    pointer_default(unique)
+]
+interface ISampleRpc
+{
+    // Context handle for stateful operations
+    typedef [context_handle] void* SAMPLE_CONTEXT_HANDLE;
+
+    // Error status type
+    typedef [fault_status, comm_status] long RPC_STATUS;
+
+    // Simple remote procedure
+    error_status_t RemoteProcedure(
+        [in] handle_t hBinding,
+        [in] long inputValue,
+        [out] long* outputValue
+    );
+
+    // Procedure with context handle
+    RPC_STATUS OpenContext(
+        [in] handle_t hBinding,
+        [in, string] const wchar_t* resourceName,
+        [out] SAMPLE_CONTEXT_HANDLE* phContext
+    );
+
+    RPC_STATUS CloseContext(
+        [in, out] SAMPLE_CONTEXT_HANDLE* phContext
+    );
+
+    // Procedure with byte count
+    RPC_STATUS TransferData(
+        [in] SAMPLE_CONTEXT_HANDLE hContext,
+        [in] long dataSize,
+        [in, size_is(dataSize)] byte* data,
+        [out] long* bytesTransferred
+    );
+
+    // Idempotent operation
+    [idempotent]
+    RPC_STATUS GetStatus(
+        [in] SAMPLE_CONTEXT_HANDLE hContext,
+        [out] long* status
+    );
+
+    // Maybe semantics (fire and forget)
+    [maybe]
+    void NotifyEvent(
+        [in] handle_t hBinding,
+        [in] long eventCode
+    );
+
+    // Broadcast call
+    [broadcast]
+    void BroadcastMessage(
+        [in] handle_t hBinding,
+        [in, string] const char* message
+    );
+};
+
+//
+// Pipe interface for streaming data
+//
+[
+    uuid(AABBCCDD-1234-5678-9ABC-DEF012345679),
+    version(1.0)
+]
+interface ISamplePipe
+{
+    typedef pipe byte BYTE_PIPE;
+    typedef pipe long LONG_PIPE;
+
+    // Streaming procedures
+    void PushData(
+        [in] handle_t hBinding,
+        [in] BYTE_PIPE dataPipe
+    );
+
+    void PullData(
+        [in] handle_t hBinding,
+        [out] BYTE_PIPE dataPipe
+    );
+
+    void TransformData(
+        [in] handle_t hBinding,
+        [in] LONG_PIPE inputPipe,
+        [out] LONG_PIPE outputPipe
+    );
+};
+
+//
+// Encapsulated union example
+//
+typedef struct tagDISCRIMINATED_DATA {
+    long dataType;
+    [switch_is(dataType)] union {
+        [case(1)]
+            long intValue;
+        [case(2)]
+            double doubleValue;
+        [case(3)]
+            [string] wchar_t* stringValue;
+        [case(4)]
+            struct {
+                long count;
+                [size_is(count)] byte* bytes;
+            } binaryData;
+        [default]
+            ;
+    } u;
+} DISCRIMINATED_DATA;
+
+//
+// Non-encapsulated union
+//
+typedef [switch_type(short)] union tagVARIANT_UNION {
+    [case(0)]
+        boolean boolVal;
+    [case(1)]
+        short shortVal;
+    [case(2)]
+        long longVal;
+    [case(3)]
+        hyper hyperVal;
+    [case(4)]
+        float floatVal;
+    [case(5)]
+        double doubleVal;
+    [default]
+        ;
+} VARIANT_UNION;
+
+#endif // _SAMPLE_RPC_IDL_

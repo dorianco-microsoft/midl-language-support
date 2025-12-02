@@ -1,0 +1,49 @@
+// Sample ACF (Application Configuration File)
+// ACF files provide client/server-specific configuration
+
+[
+    implicit_handle(handle_t hSampleBinding),
+    auto_handle
+]
+interface ISampleRpc
+{
+    // Enable memory allocation optimizations
+    [enable_allocate] RemoteProcedure();
+    
+    // Serialization of context handles
+    [context_handle_serialize] OpenContext();
+    [context_handle_noserialize] CloseContext();
+    
+    // Fault and communication status
+    [fault_status, comm_status] TransferData();
+    [fault_status, comm_status] GetStatus();
+    
+    // No stub code generation
+    [nocode] NotifyEvent();
+    
+    // Code generation for specific procedures
+    [code] BroadcastMessage();
+    
+    // Notify on completion
+    [notify] CloseContext();
+    
+    // Custom memory allocation
+    [allocate(all_nodes)] TransferData();
+    
+    // Optimization hints
+    [optimize("speed")] TransferData();
+}
+
+// Pipe interface configuration
+[
+    explicit_handle
+]
+interface ISamplePipe
+{
+    // Use strict context handles for security
+    [strict_context_handle] PushData();
+    [strict_context_handle] PullData();
+    
+    // Encode/decode for pickling
+    [encode, decode] TransformData();
+}

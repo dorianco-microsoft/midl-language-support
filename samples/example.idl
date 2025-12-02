@@ -1,0 +1,202 @@
+// Sample IDL file demonstrating MIDL syntax highlighting
+// Based on examples from Microsoft documentation
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+// Type definitions
+typedef struct tagPOINT {
+    long x;
+    long y;
+} POINT;
+
+typedef enum {
+    StateIdle = 0,
+    StateRunning,
+    StatePaused,
+    StateStopped
+} ProcessState;
+
+typedef [public] struct tagRECT {
+    long left;
+    long top;
+    long right;
+    long bottom;
+} RECT, *PRECT, *LPRECT;
+
+// Forward declarations
+interface IShape;
+interface ICircle;
+
+//
+// IShape interface definition
+//
+[
+    object,
+    uuid(12345678-1234-1234-1234-123456789ABC),
+    dual,
+    oleautomation,
+    pointer_default(unique),
+    helpstring("IShape Interface")
+]
+interface IShape : IDispatch
+{
+    // Properties
+    [propget, id(1), helpstring("Gets the X coordinate")]
+    HRESULT X([out, retval] long* pVal);
+
+    [propput, id(1), helpstring("Sets the X coordinate")]
+    HRESULT X([in] long newVal);
+
+    [propget, id(2), helpstring("Gets the Y coordinate")]
+    HRESULT Y([out, retval] long* pVal);
+
+    [propput, id(2), helpstring("Sets the Y coordinate")]
+    HRESULT Y([in] long newVal);
+
+    // Methods
+    [id(3), helpstring("Moves the shape to new coordinates")]
+    HRESULT Move([in] long x, [in] long y);
+
+    [id(4), helpstring("Draws the shape")]
+    HRESULT Draw([in] HDC hdc);
+
+    [id(5), helpstring("Gets the bounding rectangle")]
+    HRESULT GetBounds([out] RECT* pRect);
+};
+
+//
+// ICircle interface - inherits from IShape
+//
+[
+    object,
+    uuid(12345678-1234-1234-1234-123456789ABD),
+    pointer_default(unique),
+    local,
+    helpstring("ICircle Interface")
+]
+interface ICircle : IShape
+{
+    [propget, helpstring("Gets the radius")]
+    HRESULT Radius([out, retval] double* pVal);
+
+    [propput, helpstring("Sets the radius")]
+    HRESULT Radius([in] double newVal);
+
+    [helpstring("Calculates the area")]
+    HRESULT GetArea([out, retval] double* pArea);
+
+    [helpstring("Calculates the circumference")]
+    HRESULT GetCircumference([out, retval] double* pCirc);
+};
+
+//
+// IDataProcessor interface with array parameters
+//
+[
+    object,
+    uuid(12345678-1234-1234-1234-123456789ABE),
+    pointer_default(unique)
+]
+interface IDataProcessor : IUnknown
+{
+    HRESULT ProcessData(
+        [in] long count,
+        [in, size_is(count)] byte* inputData,
+        [out] long* outputSize,
+        [out, size_is(, *outputSize)] byte** outputData
+    );
+
+    HRESULT ProcessArray(
+        [in] long maxItems,
+        [in, max_is(maxItems)] long items[],
+        [out, retval] long* result
+    );
+
+    HRESULT ProcessString(
+        [in, string] wchar_t* input,
+        [out, string] wchar_t** output
+    );
+};
+
+//
+// ICallback interface for async operations
+//
+[
+    object,
+    uuid(12345678-1234-1234-1234-123456789ABF),
+    async_uuid(12345678-1234-1234-1234-123456789AC0)
+]
+interface ICallback : IUnknown
+{
+    [callback]
+    HRESULT OnComplete([in] HRESULT status, [in] VARIANT result);
+
+    [callback]
+    HRESULT OnProgress([in] long percentComplete);
+
+    [callback]
+    HRESULT OnError([in] HRESULT errorCode, [in] BSTR message);
+};
+
+//
+// Type library definition
+//
+[
+    uuid(12345678-1234-1234-1234-123456789AC1),
+    version(1.0),
+    helpstring("Sample Type Library 1.0"),
+    helpfile("sample.chm"),
+    helpcontext(100)
+]
+library SampleLib
+{
+    importlib("stdole32.tlb");
+    importlib("stdole2.tlb");
+
+    // Forward declare interfaces
+    interface IShape;
+    interface ICircle;
+    interface IDataProcessor;
+    interface ICallback;
+
+    //
+    // Shape coclass
+    //
+    [
+        uuid(12345678-1234-1234-1234-123456789AC2),
+        helpstring("Shape Class"),
+        noncreatable
+    ]
+    coclass Shape
+    {
+        [default] interface IShape;
+    };
+
+    //
+    // Circle coclass
+    //
+    [
+        uuid(12345678-1234-1234-1234-123456789AC3),
+        helpstring("Circle Class"),
+        aggregatable
+    ]
+    coclass Circle
+    {
+        [default] interface ICircle;
+        interface IShape;
+    };
+
+    //
+    // DataProcessor coclass
+    //
+    [
+        uuid(12345678-1234-1234-1234-123456789AC4),
+        helpstring("Data Processor Class")
+    ]
+    coclass DataProcessor
+    {
+        [default] interface IDataProcessor;
+        [default, source] interface ICallback;
+    };
+};
