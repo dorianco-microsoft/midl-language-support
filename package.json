@@ -3,7 +3,7 @@
   "displayName": "MIDL Language Support",
   "description": "Syntax highlighting and language support for Microsoft Interface Definition Language (MIDL/IDL) used for COM, DCOM, and RPC interface definitions",
   "version": "0.1.0",
-  "publisher": "MIDL Language Support",
+  "publisher": "midl-language-support",
   "author": {
     "name": "MIDL Language Support"
   },
